@@ -9,7 +9,7 @@ using namespace std;
 #include "Order_Tree.h"
 
 Mail mail[10005];
-Heap<100000> longest;
+Heap<10005> longest;
 Order_Tree order_tree;
 int mail_cnt = 0, mail_place[10005];
 String<50> mail_file[10005];
@@ -31,7 +31,7 @@ int main() {
                     if (record.find(file_string) != record.end()) {
                         int x = record[file_string];
                         mail_place[mail[x].id] = x;
-                        longest.push(mail[x].length);
+                        longest.push(mail[x].length, mail[x].id);
                         file.insert(mail_file[mail[x].id]);
                         order_tree.insert(mail[x]);
                     }
@@ -41,7 +41,7 @@ int main() {
                         mail[mail_cnt].input(f);
                         mail_place[mail[mail_cnt].id] = mail_cnt;
                         mail_file[mail[mail_cnt].id] = file_string;
-                        longest.push(mail[mail_cnt].length);
+                        longest.push(mail[mail_cnt].length, mail[mail_cnt].id);
                         fclose(f);
                         order_tree.insert(mail[mail_cnt]);
                         record[file_string] = mail_cnt++;
@@ -58,7 +58,7 @@ int main() {
                     puts("-");
                 else {
                     order_tree.erase(mail[mail_place[x]]);
-                    longest.erase(mail[mail_place[x]].length);
+                    longest.erase(x);
                     mail_place[x] = -1;
                     file.erase(mail_file[x]);
                     printf("%d\n", int(file.size()));
@@ -68,7 +68,7 @@ int main() {
                 if (file.empty())
                     puts("-");
                 else
-                    printf("%d\n", longest.top());
+                    printf("%d %d\n", longest.top(), mail[mail_place[longest.top()]].length);
                 break;
             case 'q':
                 from_id = to_id = -1;
