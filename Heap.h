@@ -15,6 +15,8 @@ public:
         ++cnt[x];
     }
     bool empty() {
+        while (cnt[data.top()])
+            --cnt[data.top()], data.pop();
         return data.empty();
     }
 };
