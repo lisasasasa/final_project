@@ -68,10 +68,20 @@ public:
         fgets(temp_string , 55 , file);
         to.input(temp_string + 4);
         
+        fgets(temp_string , 20 , file);
+        length = 0;
         fscanf(file,"%s",temp_string);
         for(int i = 0 ; i < temp_string.size() ; ++ i ){
             if(!((temp_string[i] >= 'A' && temp_string[i] <= 'Z') || (temp_string[i] >= 'a' && temp_string[i] <= 'z') 
-            || (temp_string[i] >= '0' && temp_string[i] <= '9') ) ) temp_
+            || (temp_string[i] >= '0' && temp_string[i] <= '9') ) ) temp_string[i] = ' ';
+            else length += 1;
         }
+        char start[22]; 
+        start = strtok(temp_string," ");
+        while(start != NULL){
+            keyword.insert(start);
+            start = strtok(NULL," ");
+        }
+
     }
-}
+};
