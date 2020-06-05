@@ -58,6 +58,7 @@ int main() {
                     puts("-");
                 else {
                     order_tree.erase(mail[mail_place[x]]);
+                    longest.erase(mail[mail_place[x]].length);
                     mail_place[x] = -1;
                     file.erase(mail_file[x]);
                     printf("%d\n", int(file.size()));
