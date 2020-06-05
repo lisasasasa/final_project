@@ -3,8 +3,8 @@ class Heap {
     int cnt[N];
     priority_queue<int> data;
 public:
-    int push(int x) {
-        data.insert(x);
+    void push(int x) {
+        data.push(x);
     }
     int top() {
         while (cnt[data.top()])

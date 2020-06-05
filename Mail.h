@@ -1,55 +1,77 @@
 class Mail{
 public:
-    String<55> from;
-    String<55> to;
+    int from;
+    int to;
     long long date;
     int id;
     int length;
     Keyword keyword;
+    Mail(long long _date = 0, int _id = 0){
+        date = _date;
+        id = _id;
+        length = 0;
+    }
+    void print() {
+        printf("From: %d\n", from);
+        printf("To: %d\n", to);
+        printf("Date: %lld\n", date);
+        printf("ID: %d\n", id);
+        printf("Length: %d\n", length);
+    }
     void input(FILE *file) {
         char month[15];
-        fgets(temp_string , 57 , file);
-        from.input(temp_string + 6);
+        String<25> word;
+        assert(fgets(temp_string, TEMP_SIZE, file));
+        for (int i = 6; temp_string[i]; ++i)
+            if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
+                temp_string[i] ^= 'a' ^ 'A';
+            else if (temp_string[i] == '\n')
+                temp_string[i] = 0;
+        from = user_hash(temp_string + 6, 1);
 
-        fgets(temp_string , 40 , file); 
-        int date , year , hour , min ;
-        sscanf(temp_string,"%d %s %d at %d:%d", &date , month ,&year , &hour , &min);
-        date = year*100000000 + date*10000 + hour*100 + min ;
-        switch(month) {
-            case strcpy(start,"January") == 0 :
-                date += 1000000;
+        assert(fgets(temp_string, TEMP_SIZE, file)); 
+        int dt , year , hour , min ;
+        sscanf(temp_string,"Date: %d %s %d at %d:%d", &dt , month ,&year , &hour , &min);
+        date = (long long)year * 100000000 + dt * 10000 + hour * 100 + min ;
+        switch (month[0]) {
+            case 'J':
+                switch (month[3]) {
+                    case 'u':
+                        date += 1000000;
+                        break;
+                    case 'e':
+                        date += 6000000;
+                        break;
+                    case 'y':
+                        date += 7000000;
+                        break;
+                }
                 break;
-            case strcpy(start,"February") == 0 :
+            case 'F':
                 date += 2000000;
                 break;
-            case strcpy(start,"March") == 0 :
-                date += 3000000;
+            case 'M':
+                if (month[2] == 'r')
+                    date += 3000000;
+                else
+                    date += 5000000;
                 break;
-            case strcpy(start,"April") == 0 :
-                date += 4000000;
+            case 'A':
+                if (month[1] == 'p')
+                    date += 4000000;
+                else
+                    date += 8000000;
                 break;
-            case strcpy(start,"May") == 0 :
-                date += 5000000;
-                break;
-            case strcpy(start,"June") == 0 :
-                date += 6000000;
-                break;
-            case strcpy(start,"July") == 0 :
-                date += 7000000;
-                break;
-            case strcpy(start,"August") == 0 :
-                date += 8000000;
-                break;
-            case strcpy(start,"September") == 0 :
+            case 'S':
                 date += 9000000;
                 break;
-            case strcpy(start,"October") == 0 :
+            case 'O':
                 date += 10000000;
                 break;
-            case strcpy(start,"November") == 0 :
+            case 'N':
                 date += 11000000;
                 break;
-            case strcpy(start,"December") == 0 :
+            case 'D':
                 date += 12000000;
                 break;
             default:
@@ -57,31 +79,38 @@ public:
                 break;
         }
         
-        fgets(temp_string , 20 , file);
+        assert(fgets(temp_string, TEMP_SIZE, file));
         sscanf(temp_string,"Message-ID: %d", &id);
 
-        char subject[22];
-        fgets(temp_string , 30 , file);
-        sscanf(temp_string,"Subject: %s", subject);
-        keyword.insert(subject);
+        assert(fgets(temp_string, TEMP_SIZE, file));
+        for (int i = 9; temp_string[i]; ++i ) {
+            if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
+                temp_string[i] ^= 'a' ^ 'A';
+            if (!isalphnum(temp_string[i])) 
+                temp_string[i] = ' ';
+        }
+        for (char *p = temp_string + 9; word.input(p);)
+            keyword.insert(word);
 
-        fgets(temp_string , 55 , file);
-        to.input(temp_string + 4);
+        assert(fgets(temp_string, TEMP_SIZE, file));
+        for (int i = 4; temp_string[i]; ++i)
+            if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
+                temp_string[i] ^= 'a' ^ 'A';
+            else if (temp_string[i] == '\n')
+                temp_string[i] = 0;
+        to = user_hash(temp_string + 4, 1);
         
-        fgets(temp_string , 20 , file);
+        assert(fgets(temp_string, TEMP_SIZE, file));
         length = 0;
-        fscanf(file,"%s",temp_string);
-        for(int i = 0 ; i < temp_string.size() ; ++ i ){
-            if(!((temp_string[i] >= 'A' && temp_string[i] <= 'Z') || (temp_string[i] >= 'a' && temp_string[i] <= 'z') 
-            || (temp_string[i] >= '0' && temp_string[i] <= '9') ) ) temp_string[i] = ' ';
-            else length += 1;
+        while (fgets(temp_string, TEMP_SIZE, file)) {
+            for (int i = 0; temp_string[i]; ++i ) {
+                if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
+                    temp_string[i] ^= 'a' ^ 'A';
+                if(!isalphnum(temp_string[i])) temp_string[i] = ' ';
+                else ++length;
+            }
+            for (char *p = temp_string; word.input(p); )
+                keyword.insert(word);
         }
-        char start[22]; 
-        start = strtok(temp_string," ");
-        while(start != NULL){
-            keyword.insert(start);
-            start = strtok(NULL," ");
-        }
-
     }
 };

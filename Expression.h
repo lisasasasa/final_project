@@ -4,38 +4,38 @@ public:
     void input(char *str) {
         vector<char> operator_stack;
         String<25> key; 
-        for (char c; c = *str; ++str) {
+        for (char c; (c = *str); ++str) {
             switch (c) {
                 case '|':
-                    while (!operator_stack.empty() && operator_stack.back() != '(')
-                        postfix.push_back(String(operator_stack.back()));
+                    for (; !operator_stack.empty() && operator_stack.back() != '('; operator_stack.pop_back())
+                        postfix.push_back(String<25>(operator_stack.back()));
                     operator_stack.push_back(c);
                     break;
                 case '&':
-                    while (!operator_stack.empty() && operator_stack.back() != '&' && operator_stack.back() != '(')
-                        postfix.push_back(String(operator_stack.back()));
+                    for (; !operator_stack.empty() && operator_stack.back() != '|' && operator_stack.back() != '('; operator_stack.pop_back())
+                        postfix.push_back(String<25>(operator_stack.back()));
                     operator_stack.push_back(c);
                     break;
                 case '!':
-                    while (!operator_stack.empty() && operator_stack.back() == '!')
-                        postfix.push_back(String(operator_stack.back()));
+                    for (; !operator_stack.empty() && operator_stack.back() == '!'; operator_stack.pop_back())
+                        postfix.push_back(String<25>(operator_stack.back()));
                     operator_stack.push_back(c);
                     break;
                 case '(':
                     operator_stack.push_back('(');
                     break;
                 case ')':
-                    while (operator_stack.back() != '(')
-                        postfix.push_back(String(operator_stack.back()));
+                    for (; operator_stack.back() != '('; operator_stack.pop_back())
+                        postfix.push_back(String<25>(operator_stack.back()));
                     operator_stack.pop_back();  
                     break;
                 default:
-                    key.input(str);
+                    key.input(str), --str;
                     postfix.push_back(key);
                     break;
             }
-            while (!operator_stack.empty())
-                postfix.push_back(String(operator_stack.back()));
-        }    
+        }   
+        for (; !operator_stack.empty(); operator_stack.pop_back())
+            postfix.push_back(String<25>(operator_stack.back()));
     }
 };

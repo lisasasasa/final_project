@@ -1,39 +1,61 @@
 template< size_t N >
 class String {
-    char *c[N];
-    int size;
+    char c[N];
+    int the_size;
 public:
+    bool operator==(const String<N> &s) const{
+        return strcmp(c, s.c) == 0;
+    }
     String() {
-        size = 0;
+        the_size = 0;
     }
     String(char ch) {
         c[0] = ch;
-        size = 1;
+        the_size = 1;
         c[1] = 0;
     }
-    bool operator==(const char &ch)const {
-        return c[0] == ch;
+    char& operator[](int idx) {
+        return c[idx];
     }
-    void size() {
-        return size;
+    int size() {
+        return the_size;
     }
-    void input(char *&s) {
-        for (size = 0; (c[size] = *s) && c[size] != ' '; ++s)
-            ++size;
-        c[size] = 0;
+    int input(char *&s) {
+        while (*s == ' ')
+            ++s;
+        if (*s == 0)
+            return 0;
+        for (the_size = 0; (c[the_size] = *s) && isalphnum(c[the_size]); ++s)
+            ++the_size;
+        c[the_size] = 0;
+        return 1;
     }
-    size_t hash() {
+    int input_temp(char *s) {
+        while (*s == ' ')
+            ++s;
+        if (*s == 0)
+            return 0;
+        for (the_size = 0; (c[the_size] = *s) && c[the_size] != ' '; ++s)
+            ++the_size;
+        c[the_size] = 0;
+        return 1;
+    }
+    size_t hash() const{
         size_t rt = 0;
-        for (int i = 0; i < size; ++i)
+        for (int i = 0; i < the_size; ++i)
             rt = ((rt << 5) + rt + c[i]);
         return rt;
+    }
+    void print() {
+        printf("%s", c);
     }
 };
 
 namespace std {
-    template<> struct hash<String> {
-        std::size_t operator()(String const& s) const noexcept {
-            return s.hash();
-        }
+    template<size_t N>
+    struct hash<String<N>> {
+      size_t operator()(const String<N> &s) const {
+        return hash<int>()(s.hash());
+      }
     };
 }
