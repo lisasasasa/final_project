@@ -25,7 +25,7 @@ public:
         for (int i = 6; temp_string[i]; ++i)
             if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                 temp_string[i] ^= 'a' ^ 'A';
-            else if (temp_string[i] == '\n')
+            else if (!isalphnum(temp_string[i]))
                 temp_string[i] = 0;
         from = user_hash(temp_string + 6, 1);
 
@@ -33,51 +33,7 @@ public:
         int dt , year , hour , min ;
         sscanf(temp_string,"Date: %d %s %d at %d:%d", &dt , month ,&year , &hour , &min);
         date = (long long)year * 100000000 + dt * 10000 + hour * 100 + min ;
-        switch (month[0]) {
-            case 'J':
-                switch (month[3]) {
-                    case 'u':
-                        date += 1000000;
-                        break;
-                    case 'e':
-                        date += 6000000;
-                        break;
-                    case 'y':
-                        date += 7000000;
-                        break;
-                }
-                break;
-            case 'F':
-                date += 2000000;
-                break;
-            case 'M':
-                if (month[2] == 'r')
-                    date += 3000000;
-                else
-                    date += 5000000;
-                break;
-            case 'A':
-                if (month[1] == 'p')
-                    date += 4000000;
-                else
-                    date += 8000000;
-                break;
-            case 'S':
-                date += 9000000;
-                break;
-            case 'O':
-                date += 10000000;
-                break;
-            case 'N':
-                date += 11000000;
-                break;
-            case 'D':
-                date += 12000000;
-                break;
-            default:
-                printf("Wrong!");
-                break;
-        }
+        date += get_month(month) * 1000000;
         
         assert(fgets(temp_string, TEMP_SIZE, file));
         sscanf(temp_string,"Message-ID: %d", &id);
@@ -96,7 +52,7 @@ public:
         for (int i = 4; temp_string[i]; ++i)
             if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                 temp_string[i] ^= 'a' ^ 'A';
-            else if (temp_string[i] == '\n')
+            else if (!isalphnum(temp_string[i]))
                 temp_string[i] = 0;
         to = user_hash(temp_string + 4, 1);
         

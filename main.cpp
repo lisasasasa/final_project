@@ -12,13 +12,13 @@ Mail mail[10005];
 Heap<10005> longest;
 Order_Tree order_tree;
 int mail_cnt = 0, mail_place[10005];
-String<50> mail_file[10005];
-unordered_map<String<50>, int> record; // record the file named for escaping adding a file repeatly
+String<35> mail_file[10005];
+unordered_map<String<35>, int> record; // record the file named for escaping adding a file repeatly
 
 int main() {
     memset(mail_place, -1, sizeof mail_place);
-    String<50> file_string;
-    unordered_set<String<50>> file;
+    String<35> file_string;
+    unordered_set<String<35>> file;
     int from_id, to_id;
     long long datel, dater;
     char c, *p;

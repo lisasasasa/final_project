@@ -26,7 +26,8 @@ public:
         if (*s == 0)
             return 0;
         for (the_size = 0; (c[the_size] = *s) && isalphnum(c[the_size]); ++s)
-            ++the_size;
+            if (the_size < 25)
+                ++the_size;
         c[the_size] = 0;
         return 1;
     }
@@ -35,7 +36,7 @@ public:
             ++s;
         if (*s == 0)
             return 0;
-        for (the_size = 0; (c[the_size] = *s) && c[the_size] != ' '; ++s)
+        for (the_size = 0; (c[the_size] = *s); ++s)
             ++the_size;
         c[the_size] = 0;
         return 1;

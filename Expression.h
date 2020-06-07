@@ -2,32 +2,32 @@ class Expression{
 public:
     vector<String<25>> postfix;
     void input(char *str) {
-        vector<char> operator_stack;
+        int stack_top = -1;
         String<25> key; 
         for (char c; (c = *str); ++str) {
             switch (c) {
                 case '|':
-                    for (; !operator_stack.empty() && operator_stack.back() != '('; operator_stack.pop_back())
-                        postfix.push_back(String<25>(operator_stack.back()));
-                    operator_stack.push_back(c);
+                    for (; (~stack_top) && temp_char_stack[stack_top] != '('; --stack_top)
+                        postfix.push_back(String<25>(temp_char_stack[stack_top]));
+                    temp_char_stack[++stack_top] = c;
                     break;
                 case '&':
-                    for (; !operator_stack.empty() && operator_stack.back() != '|' && operator_stack.back() != '('; operator_stack.pop_back())
-                        postfix.push_back(String<25>(operator_stack.back()));
-                    operator_stack.push_back(c);
+                    for (; (~stack_top) && temp_char_stack[stack_top] != '|' && temp_char_stack[stack_top] != '('; --stack_top)
+                        postfix.push_back(String<25>(temp_char_stack[stack_top]));
+                    temp_char_stack[++stack_top] = c;
                     break;
                 case '!':
-                    for (; !operator_stack.empty() && operator_stack.back() == '!'; operator_stack.pop_back())
-                        postfix.push_back(String<25>(operator_stack.back()));
-                    operator_stack.push_back(c);
+                    for (; (~stack_top) && temp_char_stack[stack_top] == '!'; --stack_top)
+                        postfix.push_back(String<25>(temp_char_stack[stack_top]));
+                    temp_char_stack[++stack_top] = c;
                     break;
                 case '(':
-                    operator_stack.push_back('(');
+                    temp_char_stack[++stack_top] = c;
                     break;
                 case ')':
-                    for (; operator_stack.back() != '('; operator_stack.pop_back())
-                        postfix.push_back(String<25>(operator_stack.back()));
-                    operator_stack.pop_back();  
+                    for (; temp_char_stack[stack_top] != '('; --stack_top)
+                        postfix.push_back(String<25>(temp_char_stack[stack_top]));
+                    --stack_top;  
                     break;
                 default:
                     key.input(str), --str;
@@ -35,7 +35,7 @@ public:
                     break;
             }
         }   
-        for (; !operator_stack.empty(); operator_stack.pop_back())
-            postfix.push_back(String<25>(operator_stack.back()));
+        for (; (~stack_top); --stack_top)
+            postfix.push_back(String<25>(temp_char_stack[stack_top]));
     }
 };

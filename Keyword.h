@@ -29,6 +29,7 @@ public:
         return temp_stack[0];
     }
     void insert(String<25> &s) {
-        data.insert(s);
+        if (s.size() < 25)
+            data.insert(s);
     }
 };
