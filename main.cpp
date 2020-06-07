@@ -103,14 +103,11 @@ int main() {
                             break;
                     }
                 }
-                {
-                    for (int i = 0; temp_string[i]; ++i)
-                        if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
-                            temp_string[i] ^= 'a' ^ 'A';
-                    Expression exp;
-                    exp.input(temp_string);
-                    order_tree.query(from_id, to_id, datel, dater, exp);
-                }
+                for (int i = 0; temp_string[i]; ++i)
+                    if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
+                        temp_string[i] ^= 'a' ^ 'A';
+                Expression::input(temp_string);
+                order_tree.query(from_id, to_id, datel, dater);
                 break;
         }
     }

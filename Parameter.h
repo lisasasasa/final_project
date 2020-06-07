@@ -4,6 +4,7 @@ const int MAX_ID = 10000;
 const int user_range = 65536;
 char temp_string[TEMP_SIZE];
 int temp_stack[STACK_SIZE];
+int postfix[STACK_SIZE], postfix_top;
 
 static constexpr const char month_table[] = {12, 5, 0, 8, 0, 0, 0, 1, 7, 4, 6, 3, 11, 9, 0, 10, 2};
 

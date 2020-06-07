@@ -11,7 +11,7 @@ class Order_Tree {
     set<Mail*, Mail_Cmp> from[user_range];
     set<Mail*, Mail_Cmp> to[user_range];
 public:
-    void query(int from_id, int to_id, long long begin, long long end, Expression &exp) {
+    void query(int from_id, int to_id, long long begin, long long end) {
         // print here
         Mail beg(begin, 0), ed(end, MAX_ID);
         vector<int> ans;
@@ -20,12 +20,12 @@ public:
             auto q = from[from_id].upper_bound(&ed);
             if (~to_id) {
                 for (; p != q; ++p)
-                    if ((*p) -> to == to_id && (*p) -> keyword.match(exp))
+                    if ((*p) -> to == to_id && (*p) -> keyword.match())
                         ans.push_back((*p) -> id);
             }
             else
                 for (; p != q; ++p)
-                    if ((*p) -> keyword.match(exp)) {
+                    if ((*p) -> keyword.match()) {
                         ans.push_back((*p) -> id);
                     }
         }
@@ -33,14 +33,14 @@ public:
             auto p = to[to_id].lower_bound(&beg);
             auto q = to[to_id].upper_bound(&ed);
             for (; p != q; ++p)
-                if ((*p) -> keyword.match(exp))
+                if ((*p) -> keyword.match())
                     ans.push_back((*p) -> id);
         }
         else {
             auto p = all.lower_bound(&beg);
             auto q = all.upper_bound(&ed);
             for (; p != q; ++p)
-                if ((*p) -> keyword.match(exp))
+                if ((*p) -> keyword.match())
                     ans.push_back((*p) -> id);
         }
         if (ans.empty())

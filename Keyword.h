@@ -1,10 +1,10 @@
 class Keyword{
     gp_hash_table<int, bool> data;
 public:
-    bool match(Expression &exp) {
+    bool match() {
         int num_top = -1;
-        for(int i = 0; i < int(exp.postfix.size()) ; ++i ) {
-            switch (exp.postfix[i]) {
+        for(int i = 0; i <= postfix_top ; ++i ) {
+            switch (postfix[i]) {
                 case -3:
                     temp_stack[num_top - 1] |= temp_stack[num_top];
                     --num_top;
@@ -17,7 +17,7 @@ public:
                     temp_stack[num_top] = !temp_stack[num_top];
                     break;
                 default:
-                    temp_stack[++num_top] = (data.find(exp.postfix[i]) != data.end());
+                    temp_stack[++num_top] = (data.find(postfix[i]) != data.end());
                     break;
             }
         }
