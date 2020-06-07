@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
+using namespace __gnu_pbds;
 #include "Parameter.h"
 #include "String.h"
 #include "Expression.h"
@@ -13,12 +15,12 @@ Heap<10005> longest;
 Order_Tree order_tree;
 int mail_cnt = 0, mail_place[10005];
 String<35> mail_file[10005];
-unordered_map<String<35>, int> record; // record the file named for escaping adding a file repeatly
+gp_hash_table<String<35>, int, hash<String<35>>> record; // record the file named for escaping adding a file repeatly
 
 int main() {
     memset(mail_place, -1, sizeof mail_place);
     String<35> file_string;
-    unordered_set<String<35>> file;
+    gp_hash_table<String<35>, bool, hash<String<35>>> file;
     int from_id, to_id;
     long long datel, dater;
     char c, *p;
@@ -32,11 +34,11 @@ int main() {
                         int x = record[file_string];
                         mail_place[mail[x].id] = x;
                         longest.push(mail[x].length, mail[x].id);
-                        file.insert(mail_file[mail[x].id]);
+                        file[mail_file[mail[x].id]] = 1;
                         order_tree.insert(mail[x]);
                     }
                     else {
-                        file.insert(file_string);
+                        file[file_string] = 1;
                         FILE *f = fopen(temp_string, "r");
                         mail[mail_cnt].input(f);
                         mail_place[mail[mail_cnt].id] = mail_cnt;
@@ -81,7 +83,6 @@ int main() {
                                     temp_string[i] ^= 'a' ^ 'A';
                                 else if (temp_string[i] == '"')
                                     temp_string[i] = 0;
-                            //printf("%s\n",temp_string+3);
                             from_id = user_hash(temp_string + 3); 
                             break;
                         case 't':

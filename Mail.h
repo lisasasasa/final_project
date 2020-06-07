@@ -19,7 +19,6 @@ public:
         printf("Length: %d\n", length);
     }
     void input(FILE *file) {
-        char month[15];
         String<25> word;
         assert(fgets(temp_string, TEMP_SIZE, file));
         for (int i = 6; temp_string[i]; ++i)
@@ -30,13 +29,26 @@ public:
         from = user_hash(temp_string + 6, 1);
 
         assert(fgets(temp_string, TEMP_SIZE, file)); 
-        int dt , year , hour , min ;
-        sscanf(temp_string,"Date: %d %s %d at %d:%d", &dt , month ,&year , &hour , &min);
-        date = (long long)year * 100000000 + dt * 10000 + hour * 100 + min ;
-        date += get_month(month) * 1000000;
-        
+        int x = 0;
+        char *tp = temp_string + 6, c;
+        for (date = 0; (c = *tp++) != ' ';)
+            date *= 10, date += c ^ '0';
+        date *= 10000;
+        date += get_month(tp) * 1000000;
+        for (; (*tp++) != ' ';);
+        for (x = 0; (c = *tp++) != ' ';)
+            x *= 10, x += c ^ '0'; 
+        date += (long long)x * 100000000;
+        for (x = 0, tp += 3; (c = *tp++) != ':';)
+            x *= 10, x += c ^ '0'; 
+        date += x * 100;
+        for (x = 0; (c = *tp++) >= '0';)
+            x *= 10, x += c ^ '0'; 
+        date += x;
+       
         assert(fgets(temp_string, TEMP_SIZE, file));
-        sscanf(temp_string,"Message-ID: %d", &id);
+        for (id = 0, tp = temp_string + 12; (c = *tp++) >= '0';)
+            id *= 10, id += c ^ '0';
 
         assert(fgets(temp_string, TEMP_SIZE, file));
         for (int i = 9; temp_string[i]; ++i ) {
@@ -46,7 +58,7 @@ public:
                 temp_string[i] = ' ';
         }
         for (char *p = temp_string + 9; word.input(p);)
-            keyword.insert(word);
+            keyword.insert(get_keyword_index(word));
 
         assert(fgets(temp_string, TEMP_SIZE, file));
         for (int i = 4; temp_string[i]; ++i)
@@ -66,7 +78,7 @@ public:
                 else ++length;
             }
             for (char *p = temp_string; word.input(p); )
-                keyword.insert(word);
+                keyword.insert(get_keyword_index(word));
         }
     }
 };

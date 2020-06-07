@@ -60,3 +60,17 @@ namespace std {
       }
     };
 }
+
+gp_hash_table<String<25>, int, hash<String<25>>> keyword_table;
+int keyword_cnt = 0;
+
+int get_keyword_index(String<25> &s, int flag = 1) {
+    auto p = keyword_table.find(s);
+    if (p == keyword_table.end()) {
+        if (flag)
+            return keyword_table[s] = ++keyword_cnt;
+        else
+            return 0;
+    }
+    return p -> second;
+}

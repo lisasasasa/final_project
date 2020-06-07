@@ -12,7 +12,6 @@ class Order_Tree {
     set<Mail*, Mail_Cmp> to[user_range];
 public:
     void query(int from_id, int to_id, long long begin, long long end, Expression &exp) {
-        //printf("%d %d %lld %lld\n",from_id,to_id,begin,end);
         // print here
         Mail beg(begin, 0), ed(end, MAX_ID);
         vector<int> ans;
