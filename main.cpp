@@ -2,6 +2,7 @@
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
 using namespace __gnu_pbds;
+typedef uint32_t uint;
 #include "Parameter.h"
 #include "String.h"
 #include "Expression.h"
@@ -13,16 +14,16 @@ using namespace __gnu_pbds;
 Mail mail[10005];
 Heap<10005> longest;
 Order_Tree order_tree;
-int mail_cnt = 0, mail_place[10005];
+uint mail_cnt = 0, mail_place[10005];
 String<35> mail_file[10005];
-gp_hash_table<String<35>, int, hash<String<35>>> record; // record the file named for escaping adding a file repeatly
+gp_hash_table<String<35>, uint, hash<String<35>>> record; // record the file named for escaping adding a file repeatly
 
 int main() {
     memset(mail_place, -1, sizeof mail_place);
     String<35> file_string;
     gp_hash_table<String<35>, bool, hash<String<35>>> file;
-    int from_id, to_id;
-    long long datel, dater;
+    uint from_id, to_id;
+    unsigned long long datel, dater;
     char c, *p;
     while (scanf("%s", temp_string) != EOF) {
         switch (temp_string[0]) { // switch is more faster
@@ -31,7 +32,7 @@ int main() {
                 file_string.input_temp(temp_string);
                 if (file.find(file_string) == file.end()) {
                     if (record.find(file_string) != record.end()) {
-                        int x = record[file_string];
+                        uint x = record[file_string];
                         mail_place[mail[x].id] = x;
                         longest.push(mail[x].length, mail[x].id);
                         file[mail_file[mail[x].id]] = 1;
@@ -48,37 +49,37 @@ int main() {
                         order_tree.insert(mail[mail_cnt]);
                         record[file_string] = mail_cnt++;
                     }
-                    printf("%d\n", int(file.size()));
+                    printf("%u\n", uint(file.size()));
                 }
                 else
                     puts("-");
                 break;
             case 'r':
-                int x;
-                assert(scanf("%d", &x));
+                uint x;
+                assert(scanf("%u", &x));
                 if (!~mail_place[x])
                     puts("-");
                 else {
                     order_tree.erase(mail[mail_place[x]]);
                     longest.erase(x);
-                    mail_place[x] = -1;
+                    mail_place[x] = uint_MAX;
                     file.erase(mail_file[x]);
-                    printf("%d\n", int(file.size()));
+                    printf("%u\n", uint(file.size()));
                 }
                 break;
             case 'l':
                 if (file.empty())
                     puts("-");
                 else
-                    printf("%d %d\n", longest.top(), mail[mail_place[longest.top()]].length);
+                    printf("%u %u\n", longest.top(), mail[mail_place[longest.top()]].length);
                 break;
             case 'q':
-                from_id = to_id = -1;
+                from_id = to_id = uint_MAX;
                 datel = 0, dater = 1e18;
                 while (scanf("%s", temp_string) && temp_string[0] == '-') {
                     switch (temp_string[1]) {
                         case 'f':
-                            for (int i = 3; temp_string[i]; ++i)
+                            for (uint i = 3; temp_string[i]; ++i)
                                 if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                                     temp_string[i] ^= 'a' ^ 'A';
                                 else if (temp_string[i] == '"')
@@ -86,7 +87,7 @@ int main() {
                             from_id = user_hash(temp_string + 3); 
                             break;
                         case 't':
-                            for (int i = 3; temp_string[i]; ++i)
+                            for (uint i = 3; temp_string[i]; ++i)
                                 if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                                     temp_string[i] ^= 'a' ^ 'A';
                                 else if (temp_string[i] == '"')
@@ -103,7 +104,7 @@ int main() {
                             break;
                     }
                 }
-                for (int i = 0; temp_string[i]; ++i)
+                for (uint i = 0; temp_string[i]; ++i)
                     if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                         temp_string[i] ^= 'a' ^ 'A';
                 Expression::input(temp_string);

@@ -1,7 +1,7 @@
 template< size_t N >
 class String {
     char c[N];
-    int the_size;
+    uint the_size;
 public:
     bool operator==(const String<N> &s) const{
         return strcmp(c, s.c) == 0;
@@ -14,13 +14,13 @@ public:
         the_size = 1;
         c[1] = 0;
     }
-    char& operator[](int idx) {
+    char& operator[](uint idx) {
         return c[idx];
     }
-    int size() {
+    uint size() {
         return the_size;
     }
-    int input(char *&s) {
+    uint input(char *&s) {
         while (*s == ' ')
             ++s;
         if (*s == 0)
@@ -31,7 +31,7 @@ public:
         c[the_size] = 0;
         return 1;
     }
-    int input_temp(char *s) {
+    uint input_temp(char *s) {
         while (*s == ' ')
             ++s;
         if (*s == 0)
@@ -43,7 +43,7 @@ public:
     }
     size_t hash() const{
         size_t rt = 0;
-        for (int i = 0; i < the_size; ++i)
+        for (uint i = 0; i < the_size; ++i)
             rt = ((rt << 5) + rt + c[i]);
         return rt;
     }
@@ -56,15 +56,15 @@ namespace std {
     template<size_t N>
     struct hash<String<N>> {
       size_t operator()(const String<N> &s) const {
-        return hash<int>()(s.hash());
+        return hash<uint>()(s.hash());
       }
     };
 }
 
-gp_hash_table<String<25>, int, hash<String<25>>> keyword_table;
-int keyword_cnt = 0;
+gp_hash_table<String<25>, uint, hash<String<25>>> keyword_table;
+uint keyword_cnt = 0;
 
-int get_keyword_index(String<25> &s, int flag = 1) {
+uint get_keyword_index(String<25> &s, uint flag = 1) {
     auto p = keyword_table.find(s);
     if (p == keyword_table.end()) {
         if (flag)

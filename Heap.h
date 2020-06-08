@@ -1,22 +1,22 @@
 template< size_t N >
 class Heap {
     bitset<N> vis;
-    priority_queue<pair<int, int>> data;
+    priority_queue<pair<uint, uint>> data;
 public:
-    void push(int x,int num) {
-        data.push(pair<int, int>(x, -num));
+    void push(uint x,uint num) {
+        data.push(pair<uint, uint>(x, ~num));
         vis[num] = 1;
     }
-    int top() {
-        while (!data.empty() && !vis[-data.top().second])
+    uint top() {
+        while (!data.empty() && !vis[~data.top().second])
             data.pop();
-        return -data.top().second;
+        return ~data.top().second;
     }
-    void erase(int num) {
+    void erase(uint num) {
         vis[num] = 0;
     }
     bool empty() {
-        while (!data.empty() && !vis[-data.top().second])
+        while (!data.empty() && !vis[~data.top().second])
             data.pop();
         return data.empty();
     }

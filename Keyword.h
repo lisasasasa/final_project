@@ -1,29 +1,29 @@
 class Keyword{
-    gp_hash_table<int, bool> data;
+    gp_hash_table<uint, bool> data;
 public:
     bool match() {
-        int num_top = -1;
-        for(int i = 0; i <= postfix_top ; ++i ) {
-            switch (postfix[i]) {
-                case -3:
+        uint num_top = uint_MAX;
+        for(uint i = 0; i <= Expression::postfix_top ; ++i ) {
+            switch (Expression::postfix[i]) {
+                case uint_MAX - 3:
                     temp_stack[num_top - 1] |= temp_stack[num_top];
                     --num_top;
                     break;
-                case -2:
+                case uint_MAX - 2:
                     temp_stack[num_top - 1] &= temp_stack[num_top];
                     --num_top;
                     break;
-                case -1:
+                case uint_MAX - 1:
                     temp_stack[num_top] = !temp_stack[num_top];
                     break;
                 default:
-                    temp_stack[++num_top] = (data.find(postfix[i]) != data.end());
+                    temp_stack[++num_top] = (data.find(Expression::postfix[i]) != data.end());
                     break;
             }
         }
         return temp_stack[0];
     }
-    void insert(int x) {
+    void insert(uint x) {
         data[x] = 1;
     }
 };

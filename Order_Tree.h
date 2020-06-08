@@ -10,45 +10,45 @@ class Order_Tree {
     set<Mail*, Mail_Cmp> all;
     set<Mail*, Mail_Cmp> from[user_range];
     set<Mail*, Mail_Cmp> to[user_range];
+    uint ans_stack[MAX_ID];
 public:
-    void query(int from_id, int to_id, long long begin, long long end) {
-        // print here
+    void query(uint from_id, uint to_id, unsigned long long begin, unsigned long long end) {
+        // pruint here
         Mail beg(begin, 0), ed(end, MAX_ID);
-        vector<int> ans;
+        uint ans_top = uint_MAX;
         if (~from_id) {
             auto p = from[from_id].lower_bound(&beg);
             auto q = from[from_id].upper_bound(&ed);
             if (~to_id) {
                 for (; p != q; ++p)
                     if ((*p) -> to == to_id && (*p) -> keyword.match())
-                        ans.push_back((*p) -> id);
+                        ans_stack[++ans_top] = (*p) -> id;
             }
             else
                 for (; p != q; ++p)
-                    if ((*p) -> keyword.match()) {
-                        ans.push_back((*p) -> id);
-                    }
+                    if ((*p) -> keyword.match())
+                        ans_stack[++ans_top] = (*p) -> id;
         }
         else if (~to_id) {
             auto p = to[to_id].lower_bound(&beg);
             auto q = to[to_id].upper_bound(&ed);
             for (; p != q; ++p)
                 if ((*p) -> keyword.match())
-                    ans.push_back((*p) -> id);
+                    ans_stack[++ans_top] = (*p) -> id;
         }
         else {
             auto p = all.lower_bound(&beg);
             auto q = all.upper_bound(&ed);
             for (; p != q; ++p)
                 if ((*p) -> keyword.match())
-                    ans.push_back((*p) -> id);
+                    ans_stack[++ans_top] = (*p) -> id;
         }
-        if (ans.empty())
+        if (!~ans_top)
             puts("-");
         else {
-            sort(ans.begin(), ans.end());
-            for (int i = 0; i < int(ans.size()); ++i)
-                printf("%d%c", ans[i], " \n"[i + 1 == int(ans.size())]);
+            sort(ans_stack, ans_stack + ans_top + 1);
+            for (uint i = 0; i <= ans_top; ++i)
+                printf("%u%c", ans_stack[i], " \n"[i == ans_top]);
         }
     }
     // When id = -1, means nothing
