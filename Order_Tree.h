@@ -1,5 +1,7 @@
+#include "Treap.h"
+
 struct Mail_Cmp {
-    bool operator()(const Mail* a, const Mail* b) const { 
+    bool operator()(Mail* const &a, Mail* const &b) const { 
         if (a -> date != b -> date)
             return a -> date < b -> date;
         return a -> id < b -> id;
@@ -7,41 +9,23 @@ struct Mail_Cmp {
 };
 
 class Order_Tree {
-    set<Mail*, Mail_Cmp> from[user_range];
-    set<Mail*, Mail_Cmp> to[user_range];
-    set<Mail*, Mail_Cmp> all;
+    Treap<Mail*, Mail_Cmp> from[user_range];
+    Treap<Mail*, Mail_Cmp> to[user_range];
+    Treap<Mail*, Mail_Cmp> all;
 public:
     void query(uint from_id, uint to_id, unsigned long long begin, unsigned long long end) {
-        // pruint here
+        // print here
         Mail beg(begin, 0), ed(end, MAX_ID);
         static uint ans_stack[MAX_ID];
         uint ans_top = uint_MAX;
         if (~from_id) {
-            auto p = from[from_id].lower_bound(&beg);
-            auto q = from[from_id].upper_bound(&ed);
-            if (~to_id) {
-                for (; p != q; ++p)
-                    if ((*p) -> to == to_id && (*p) -> keyword.match())
-                        ans_stack[++ans_top] = (*p) -> id;
-            }
-            else
-                for (; p != q; ++p)
-                    if ((*p) -> keyword.match())
-                        ans_stack[++ans_top] = (*p) -> id;
+            from[from_id].find(&beg, &ed, to_id, ans_stack, ans_top);
         }
         else if (~to_id) {
-            auto p = to[to_id].lower_bound(&beg);
-            auto q = to[to_id].upper_bound(&ed);
-            for (; p != q; ++p)
-                if ((*p) -> keyword.match())
-                    ans_stack[++ans_top] = (*p) -> id;
+            to[to_id].find(&beg, &ed, -1, ans_stack, ans_top);
         }
         else {
-            auto p = all.lower_bound(&beg);
-            auto q = all.upper_bound(&ed);
-            for (; p != q; ++p)
-                if ((*p) -> keyword.match())
-                    ans_stack[++ans_top] = (*p) -> id;
+            all.find(&beg, &ed, -1, ans_stack, ans_top);
         }
         if (!~ans_top)
             puts("-");
