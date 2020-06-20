@@ -2,7 +2,7 @@ class Keyword{
     gp_hash_table<uint, bool> data;
 public:
     bool match() {
-        uint num_top = uint_MAX;
+        uint num_top(uint_MAX);
         for(uint i = 0; i <= Expression::postfix_top ; ++i ) {
             switch (Expression::postfix[i]) {
                 case uint_MAX - 3:

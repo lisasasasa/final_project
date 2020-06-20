@@ -6,13 +6,9 @@ public:
     bool operator==(const String<N> &s) const{
         return strcmp(c, s.c) == 0;
     }
-    String() {
-        the_size = 0;
-    }
-    String(char ch) {
-        c[0] = ch;
-        the_size = 1;
-        c[1] = 0;
+    String(): the_size(0) {}
+    String(char ch): the_size(1) {
+        c[0] = ch, c[1] = 0;
     }
     char& operator[](uint idx) {
         return c[idx];

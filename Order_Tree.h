@@ -7,14 +7,14 @@ struct Mail_Cmp {
 };
 
 class Order_Tree {
-    set<Mail*, Mail_Cmp> all;
     set<Mail*, Mail_Cmp> from[user_range];
     set<Mail*, Mail_Cmp> to[user_range];
-    uint ans_stack[MAX_ID];
+    set<Mail*, Mail_Cmp> all;
 public:
     void query(uint from_id, uint to_id, unsigned long long begin, unsigned long long end) {
         // pruint here
         Mail beg(begin, 0), ed(end, MAX_ID);
+        static uint ans_stack[MAX_ID];
         uint ans_top = uint_MAX;
         if (~from_id) {
             auto p = from[from_id].lower_bound(&beg);
@@ -53,13 +53,9 @@ public:
     }
     // When id = -1, means nothing
     void insert(Mail &M) {
-        all.insert(&M);
-        from[M.from].insert(&M);
-        to[M.to].insert(&M);
+        from[M.from].insert(&M), to[M.to].insert(&M), all.insert(&M);
     }
     void erase(Mail &M) {
-        all.erase(&M);
-        from[M.from].erase(&M);
-        to[M.to].erase(&M);
+        from[M.from].erase(&M), to[M.to].erase(&M), all.erase(&M);
     }
 };

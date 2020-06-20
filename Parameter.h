@@ -1,5 +1,5 @@
 const uint uint_MAX = 4294967295;
-const uint TEMP_SIZE = 1000000;
+const uint TEMP_SIZE = 100000;
 const uint STACK_SIZE = 100;
 const uint MAX_ID = 10000;
 const uint user_range = 65536;
@@ -14,7 +14,7 @@ static constexpr inline uint get_month(const char *str) {
 
 char user[user_range][55];
 inline uint user_hash(char *s, uint flag = 0) { // Perfect hash
-    uint hash = 0;
+    uint hash(0);
     for (char c, *p = s; (c = *p); ++p)
         hash = (((hash << 6) + hash) + c) & (user_range - 1);
     if (flag) {

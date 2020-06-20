@@ -1,7 +1,7 @@
 namespace Expression{
     uint postfix[STACK_SIZE], postfix_top;
     void input(char *str) {
-        uint stack_top = uint_MAX;
+        uint stack_top(uint_MAX);
         postfix_top = uint_MAX;
         String<25> key; 
         // !:uint_MAX-1, &:uint_MAX-2, |:uint_MAX-3, (:uint_MAX-4

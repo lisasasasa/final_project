@@ -1,17 +1,13 @@
 class Mail{
 public:
+    Keyword keyword;
+    unsigned long long date;
     uint from;
     uint to;
-    unsigned long long date;
     uint id;
     uint length;
-    Keyword keyword;
-    Mail(unsigned long long _date = 0, uint _id = 0){
-        date = _date;
-        id = _id;
-        length = 0;
-    }
-    void pruint() {
+    Mail(unsigned long long _date = 0, uint _id = 0): date(_date), id(_id), length(0){}
+    void print() {
         printf("From: %d\n", from);
         printf("To: %d\n", to);
         printf("Date: %lld\n", date);
@@ -20,7 +16,8 @@ public:
     }
     void input(FILE *file) {
         String<25> word;
-        assert(fgets(temp_string, TEMP_SIZE, file));
+        if (!fgets(temp_string, TEMP_SIZE, file) )
+            exit(1);
         for (uint i = 6; temp_string[i]; ++i)
             if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                 temp_string[i] ^= 'a' ^ 'A';
@@ -30,8 +27,9 @@ public:
 
 /* read date
 ==========================================================*/
-        assert(fgets(temp_string, TEMP_SIZE, file)); 
-        uint x = 0;
+        if (!fgets(temp_string, TEMP_SIZE, file))
+            exit(1);
+        uint x(0);
         char *tp = temp_string + 6, c;
         for (date = 0; (c = *tp++) != ' ';)
             date *= 10, date += c ^ '0';
@@ -50,12 +48,14 @@ public:
 /*
 ==========================================================*/
        
-        assert(fgets(temp_string, TEMP_SIZE, file));
+        if (!fgets(temp_string, TEMP_SIZE, file))
+            exit(1);
         for (id = 0, tp = temp_string + 12; (c = *tp++) >= '0';)
             id *= 10, id += c ^ '0';
         sscanf(temp_string,"Message-ID: %d", &id);
 
-        assert(fgets(temp_string, TEMP_SIZE, file));
+        if (!fgets(temp_string, TEMP_SIZE, file))
+            exit(1);
         for (uint i = 9; temp_string[i]; ++i ) {
             if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                 temp_string[i] ^= 'a' ^ 'A';
@@ -65,7 +65,8 @@ public:
         for (char *p = temp_string + 9; word.input(p);)
             keyword.insert(get_keyword_index(word));
 
-        assert(fgets(temp_string, TEMP_SIZE, file));
+        if (!fgets(temp_string, TEMP_SIZE, file))
+            exit(1);
         for (uint i = 4; temp_string[i]; ++i)
             if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
                 temp_string[i] ^= 'a' ^ 'A';
