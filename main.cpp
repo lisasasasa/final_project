@@ -81,7 +81,6 @@ int main() {
                                     temp_string[i] ^= 'a' ^ 'A';
                                 else if (temp_string[i] == '"')
                                     temp_string[i] = 0;
-                            //printf("%s\n",temp_string+3);
                             from_id = user_hash(temp_string + 3); 
                             break;
                         case 't':

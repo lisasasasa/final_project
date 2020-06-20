@@ -3,9 +3,6 @@ class Keyword{
 public:
     bool match(Expression &exp) {
         int num_top = -1;
-        //for (auto i:exp.postfix)
-        //    i.print(),printf(" ");
-       // puts("");
         for(int i = 0; i < int(exp.postfix.size()) ; ++i ) {
             switch (exp.postfix[i][0]) {
                 case '|':
@@ -20,8 +17,6 @@ public:
                     temp_stack[num_top] = !temp_stack[num_top];
                     break;
                 default:
-                    //exp.postfix[i].print();
-                    //printf(" %d\n",int(data.count(exp.postfix[i])));
                     temp_stack[++num_top] = data.count(exp.postfix[i]);
                     break;
             }

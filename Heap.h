@@ -8,7 +8,7 @@ public:
     }
     int top() {
         while (!data.empty() && cnt[-data.top().second])
-            --cnt[data.top().second], data.pop();
+            --cnt[-data.top().second], data.pop();
         return -data.top().second;
     }
     void erase(int num) {
@@ -16,7 +16,7 @@ public:
     }
     bool empty() {
         while (!data.empty() && cnt[-data.top().second])
-            --cnt[data.top().second], data.pop();
+            --cnt[-data.top().second], data.pop();
         return data.empty();
     }
 };
