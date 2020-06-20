@@ -6,8 +6,20 @@ class Treap {
         T data;
         uint pri;
         Node *l, *r;
+        Node(){}
         Node(const T &k):data(k), pri(rand()), l(0), r(0){}
     };
+    static const uint C = 100000;
+    static Node mem[C];
+    static uint mem_stack[C], mem_top, mem_stack_top;
+    Node* newNode(const T &k) {
+        if (mem_top == C)
+            return &(mem[mem_stack[--mem_stack_top]] = Node(k));
+        return &(mem[mem_top++] = Node(k));
+    }
+    void delNode(Node *&p) {
+        mem_stack[mem_stack_top++] = p - mem;
+    }
     Node* root;
     Node *merge(Node *a, Node *b) {
         if (!a || !b)
@@ -28,7 +40,7 @@ class Treap {
         if (o -> data == k) {
             Node *p = o;
             o = merge(o -> l, o -> r);
-            delete p;
+            delNode(p);
         }
         else if (comp(k, o -> data))
             remove(o -> l, k);
@@ -49,7 +61,7 @@ public:
     void insert(const T &k) {
         Node *a, *b;
         split(root, a, b, k);
-        root = merge(a, merge(new Node(k), b));
+        root = merge(a, merge(newNode(k), b));
     }
     void erase(const T &k) {
         remove(root, k);
@@ -58,3 +70,12 @@ public:
         find_data(left, right, to_id, ans_stack, ans_top, root);
     }
 };
+
+template<typename T, class Compare>
+typename Treap<T, Compare>::Node Treap<T, Compare>::mem[C];
+template<typename T, class Compare>
+uint Treap<T, Compare>::mem_stack[C];
+template<typename T, class Compare>
+uint Treap<T, Compare>::mem_stack_top = 0;
+template<typename T, class Compare>
+uint Treap<T, Compare>::mem_top = 0;
