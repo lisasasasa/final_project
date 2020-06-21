@@ -1,6 +1,7 @@
 const int TEMP_SIZE = 1000000;
 const int STACK_SIZE = 100;
 const int MAX_ID = 10000;
+const int MAX_MAIL = 10005;
 const int user_range = 65536;
 char temp_string[TEMP_SIZE];
 int temp_stack[STACK_SIZE];

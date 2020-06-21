@@ -23,6 +23,9 @@ public:
         }
         return temp_stack[0];
     }
+    bool match(string &s) {
+        return data.count(String<25>(s));
+    }
     void insert(String<25> &s) {
         data.insert(s);
     }

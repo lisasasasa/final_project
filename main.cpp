@@ -8,11 +8,11 @@ using namespace std;
 #include "Heap.h"
 #include "Order_Tree.h"
 
-Mail mail[10005];
-Heap<10005> longest;
+Mail mail[MAX_MAIL];
+Heap<MAX_MAIL, double> longest;
 Order_Tree order_tree;
-int mail_cnt = 0, mail_place[10005];
-String<50> mail_file[10005];
+int mail_cnt = 0, mail_place[MAX_MAIL];
+String<50> mail_file[MAX_MAIL];
 unordered_map<String<50>, int> record; // record the file named for escaping adding a file repeatly
 
 int main() {

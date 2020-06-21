@@ -1,12 +1,12 @@
-template< size_t N >
+template< size_t N, typename T >
 class Heap {
     int cnt[N];
-    priority_queue<pair<int, int>> data;
+    priority_queue<pair<T, int>> data;
 public:
-    void push(int x,int num) {
-        data.push(pair<int, int>(x, -num));
+    void push(T x,int num) {
+        data.push(pair<T, int>(x, -num));
     }
-    int top() {
+    T top() {
         while (!data.empty() && cnt[-data.top().second])
             --cnt[-data.top().second], data.pop();
         return -data.top().second;
@@ -18,5 +18,8 @@ public:
         while (!data.empty() && cnt[-data.top().second])
             --cnt[-data.top().second], data.pop();
         return data.empty();
+    }
+    void kth() {
+        
     }
 };

@@ -14,6 +14,9 @@ public:
         the_size = 1;
         c[1] = 0;
     }
+    String(string &s) {
+        strcpy(s.c_str(), c);
+    }
     char& operator[](int idx) {
         return c[idx];
     }
