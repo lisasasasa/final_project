@@ -1,7 +1,9 @@
 #include "Skip_List.h"
 
 struct Mail_Cmp {
-    bool operator()(const Mail* a, const Mail* b) const { 
+    bool operator()(const Mail* a, const Mail* b) const {
+        if (!a) return 0;
+        if (!b) return 1;
         if (a -> date != b -> date)
             return a -> date < b -> date;
         return a -> id < b -> id;
@@ -42,7 +44,7 @@ public:
             auto p = all.lower_bound(&beg);
             auto q = all.upper_bound(&ed);
             for (; p != q; ++p)
-                if ((*p) -> keyword.match())
+                if (assert(*p), (*p) -> keyword.match())
                     ans_stack[++ans_top] = (*p) -> id;
         }
         if (!~ans_top)
@@ -55,9 +57,13 @@ public:
     }
     // When id = -1, means nothing
     void insert(Mail &M) {
-        from[M.from].insert(&M), to[M.to].insert(&M), all.insert(&M);
+        from[M.from].insert(&M);
+        to[M.to].insert(&M);
+        all.insert(&M);
     }
     void erase(Mail &M) {
-        from[M.from].erase(&M), to[M.to].erase(&M), all.erase(&M);
+        from[M.from].erase(&M);
+        to[M.to].erase(&M);
+        all.erase(&M);
     }
 };

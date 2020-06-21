@@ -20,6 +20,7 @@ gp_hash_table<String<35>, uint, hash<String<35>>> record; // record the file nam
 uint mail_cnt;
 
 int main() {
+    srand(time(NULL));
     memset(mail_place, -1, sizeof mail_place);
     String<35> file_string;
     gp_hash_table<String<35>, bool, hash<String<35>>> file;

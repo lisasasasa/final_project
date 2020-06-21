@@ -1,37 +1,47 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-
 template<class Key, class Compare = less<Key>>
 class skip_list{ 
     class node{
-        Key data;
-        node* above;
-        node* below;
-        node* before;
-        node* after;
-        node(const Key &_data = Key(), const node* &_after = NULL):
-            data(_data), above(NULL), below(NULL), before(NULL), after(_after){};  
+        public:
+            Key data;
+            node* above;
+            node* below;
+            node* before;
+            node* after;
+            node(const Key &_data = Key(), node* _after = NULL):
+                data(_data), above(NULL), below(NULL), before(NULL), after(_after){};  
     };
     Compare comp;
-    node* s;
     int height;
-    node* skip_search(Key &M){
+    node* s;
+    node* skip_search(const Key &M){
         node *p = s;
         while (p -> below != NULL){
             p = p -> below;
-            while (!comp(M, p -> after)){
-                p -> p.after;
+            while (!comp(M, p -> after -> data)){
+                p = p -> after;
             }
         }
         return p;
     }
-public:
-    skip_list():height(0), s(new node()){};
+    public:
+    skip_list():height(0){
+        s = new node();
+        s -> after = new node();
+        s -> after -> before = s;
+        s -> above = new node();
+        s -> above -> below = s;
+        s = s -> above;
+        s -> after = new node();
+        s -> after -> before = s;
+        s -> after -> below = s -> below -> after;
+        s -> below -> after -> above = s -> after;
+    };
     void insert(const Key &M){
         node* k = skip_search(M);
         node* node_M = new node(M, k -> after);
+        k -> after -> before = node_M;
         k -> after = node_M;
+        node_M -> before = k;
         int i = -1;
         while(rand() & 1){
             i++;
@@ -39,8 +49,12 @@ public:
                 height++;
                 node *new_s = new node();
                 s -> above = new_s;
-                new_s.below = s;
+                new_s -> below = s;
                 s = new_s;
+                s -> after = new node();
+                s -> after -> before = s;
+                s -> after -> below = s -> below -> after;
+                s -> below -> after -> above = s -> after;
             }
             while (k -> above == NULL){
                 k = k -> before;
@@ -52,14 +66,14 @@ public:
 
             k -> after = insert_M;
             insert_M -> before = k;
-            
+
             insert_M -> below = node_M;
             node_M -> above = insert_M;
-            
+
             node_M = insert_M;
         }
     }
-    void remove(const Key &M){
+    void erase(const Key &M){
         node* k = skip_search(M);
         while(k != NULL){
             k -> before -> after = k -> after;
@@ -70,35 +84,45 @@ public:
         }
     }
     class iterator{ 
-    public: 
-    iterator(const node* pNode = s) noexcept: 
-        m_pCurrentNode (pNode){}
-  
-        iterator& operator=(node* pNode){ 
-            this -> m_pCurrentNode = pNode; 
-            return *this;
-        } 
-  
-        // Prefix ++ overload 
-        iterator& operator++(){ 
-            if (m_pCurrentNode) 
-                m_pCurrentNode = m_pCurrentNode -> after; 
-            return *this;
-        } 
-        bool operator!=(const iterator& iterator){ 
-            return m_pCurrentNode != iterator.m_pCurrentNode; 
-        } 
-  
-        Key operator*() { 
-            return m_pCurrentNode -> data; 
-        }
-    private: 
-        const node* m_pCurrentNode; 
+        public: 
+            iterator(node* pNode = NULL) noexcept: 
+                m_pCurrentNode (pNode){}
+
+            iterator& operator=(node* pNode){ 
+                this -> m_pCurrentNode = pNode; 
+                return *this;
+            } 
+
+            // Prefix ++ overload 
+            iterator& operator++(){ 
+                if (m_pCurrentNode) 
+                    m_pCurrentNode = m_pCurrentNode -> after; 
+                return *this;
+            } 
+            bool operator!=(const iterator& it){ 
+                return m_pCurrentNode != it.m_pCurrentNode; 
+            } 
+
+            Key& operator*() { 
+                return m_pCurrentNode -> data; 
+            }
+        private: 
+            node* m_pCurrentNode; 
     };
     iterator lower_bound(const Key &M){
-        return iterator(skip_search(M));
+        node *p = s;
+        while (p -> below != NULL){
+            p = p -> below;
+            while (comp(p -> after -> data, M)){
+                p = p -> after;
+            }
+        }
+        return iterator(p -> after);
     }
     iterator upper_bound(const Key &M){
-        return ++iterator(skip_search(M));
+        node* p = skip_search(M);
+        if (!p -> after)
+            return iterator(p);
+        return iterator(p -> after);
     }
 };
