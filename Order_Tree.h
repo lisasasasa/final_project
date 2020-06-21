@@ -1,3 +1,5 @@
+#include "Skip_List.h"
+
 struct Mail_Cmp {
     bool operator()(const Mail* a, const Mail* b) const { 
         if (a -> date != b -> date)
@@ -7,9 +9,9 @@ struct Mail_Cmp {
 };
 
 class Order_Tree {
-    set<Mail*, Mail_Cmp> from[user_range];
-    set<Mail*, Mail_Cmp> to[user_range];
-    set<Mail*, Mail_Cmp> all;
+    skip_list<Mail*, Mail_Cmp> from[user_range];
+    skip_list<Mail*, Mail_Cmp> to[user_range];
+    skip_list<Mail*, Mail_Cmp> all;
 public:
     void query(uint from_id, uint to_id, unsigned long long begin, unsigned long long end) {
         // pruint here
