@@ -30,3 +30,4 @@ public:
         data.insert(s);
     }
 };
+

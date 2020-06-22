@@ -1,7 +1,8 @@
 template< size_t N, typename T >
 class Heap {
-    int cnt[N];
-    priority_queue<pair<T, int>> data;
+    int cnt[N] ;
+    int Top = 0 ;
+    pair<T, int> data[N];
 public:
     void push(T x,int num) {
         data.push(pair<T, int>(x, -num));
@@ -20,6 +21,6 @@ public:
         return data.empty();
     }
     void kth() {
-        
+
     }
 };

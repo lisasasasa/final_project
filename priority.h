@@ -53,7 +53,7 @@ public:
             if( M.keyword().match(people[i])) PEOPLE = 110/(i+1) - 100 ;
         }
         for (int  i = 0 ; i < password.size() ; ++i ) {
-            if( M.keyword().match(password[i])) PASSWD = 110/(i+1) - 100 ;
+            if( M.keyword().match(password[i])) PASSWD += 110/(i+1) - 100 ;
         DATE = M.date/20000000 ;
         value = People * PEOPLE + Password * PASSWD + Date * DATE ;
         list.push( value , M.id );
