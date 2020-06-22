@@ -28,6 +28,7 @@ int main() {
     uint from_id, to_id;
     char c, *p;
     while (scanf("%s", temp_string) != EOF) {
+        fflush(stdout);
         switch (temp_string[0]) { // switch is more faster
             case 'q':
                 from_id = to_id = uint_MAX;

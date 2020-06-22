@@ -10,8 +10,26 @@ class skip_list{
             node(const Key &_data = Key(), node* _after = NULL):
                 data(_data), above(NULL), below(NULL), before(NULL), after(_after){};  
     };
+    static const uint C = 3000000;
+    static node mem[C];
+    static uint mem_stack[C], mem_top, mem_stack_top;
+    node* newnode(const Key &_data = Key(), node* _after = NULL) {
+        node *p;
+        if (mem_top == C)
+            p = &(mem[mem_stack[--mem_stack_top]]);
+        p = &mem[mem_top++];
+        p -> data = _data;
+        p -> above = NULL;
+        p -> below = NULL;
+        p -> before = NULL;
+        p -> after = _after;
+        return p;
+    }
+    void delnode(node *&p) {
+        mem_stack[mem_stack_top++] = p - mem;
+    }
     Compare comp;
-    int height;
+    uint height;
     node* s;
     node* skip_search(const Key &M){
         node *p = s;
@@ -38,20 +56,20 @@ class skip_list{
     };
     void insert(const Key &M){
         node* k = skip_search(M);
-        node* node_M = new node(M, k -> after);
+        node* node_M = newnode(M, k -> after);
         k -> after -> before = node_M;
         k -> after = node_M;
         node_M -> before = k;
-        int i = -1;
+        uint i = uint_MAX;
         while(rand() & 1){
             i++;
             if(i >= height){
                 height++;
-                node *new_s = new node();
+                node *new_s = newnode();
                 s -> above = new_s;
                 new_s -> below = s;
                 s = new_s;
-                s -> after = new node();
+                s -> after = newnode();
                 s -> after -> before = s;
                 s -> after -> below = s -> below -> after;
                 s -> below -> after -> above = s -> after;
@@ -60,7 +78,7 @@ class skip_list{
                 k = k -> before;
             }
             k = k -> above;
-            node *insert_M = new node(M, k -> after);
+            node *insert_M = newnode(M, k -> after);
 
             k -> after -> before = insert_M;
 
@@ -80,49 +98,28 @@ class skip_list{
             k -> after -> before = k -> before;
             node *tmp = k;
             k = k -> above;
-            delete tmp;
+            delnode(tmp);
         }
     }
-    class iterator{ 
-        public: 
-            iterator(node* pNode = NULL) noexcept: 
-                m_pCurrentNode (pNode){}
-
-            iterator& operator=(node* pNode){ 
-                this -> m_pCurrentNode = pNode; 
-                return *this;
-            } 
-
-            // Prefix ++ overload 
-            iterator& operator++(){ 
-                if (m_pCurrentNode) 
-                    m_pCurrentNode = m_pCurrentNode -> after; 
-                return *this;
-            } 
-            bool operator!=(const iterator& it){ 
-                return m_pCurrentNode != it.m_pCurrentNode; 
-            } 
-
-            Key& operator*() { 
-                return m_pCurrentNode -> data; 
-            }
-        private: 
-            node* m_pCurrentNode; 
-    };
-    iterator lower_bound(const Key &M){
+    void find(const Key &left, const Key &right, uint to_id, uint *ans_stack, uint &ans_top) {
         node *p = s;
         while (p -> below != NULL){
             p = p -> below;
-            while (comp(p -> after -> data, M)){
+            while (comp(p -> after -> data, left)){
                 p = p -> after;
             }
         }
-        return iterator(p -> after);
-    }
-    iterator upper_bound(const Key &M){
-        node* p = skip_search(M);
-        if (!p -> after)
-            return iterator(p);
-        return iterator(p -> after);
+        for (p = p -> after; !comp(right, p -> data); p = p -> after)
+            if ((!~to_id || p -> data -> to == to_id) && p -> data -> keyword.match())
+                ans_stack[++ans_top] = p -> data -> id;
     }
 };
+
+template<typename T, class Compare>
+typename skip_list<T, Compare>::node skip_list<T, Compare>::mem[C];
+template<typename T, class Compare>
+uint skip_list<T, Compare>::mem_stack[C];
+template<typename T, class Compare>
+uint skip_list<T, Compare>::mem_stack_top = 0;
+template<typename T, class Compare>
+uint skip_list<T, Compare>::mem_top = 0;

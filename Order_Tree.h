@@ -21,31 +21,13 @@ public:
         static uint ans_stack[MAX_ID];
         uint ans_top = uint_MAX;
         if (~from_id) {
-            auto p = from[from_id].lower_bound(&beg);
-            auto q = from[from_id].upper_bound(&ed);
-            if (~to_id) {
-                for (; p != q; ++p)
-                    if ((*p) -> to == to_id && (*p) -> keyword.match())
-                        ans_stack[++ans_top] = (*p) -> id;
-            }
-            else
-                for (; p != q; ++p)
-                    if ((*p) -> keyword.match())
-                        ans_stack[++ans_top] = (*p) -> id;
+            from[from_id].find(&beg, &ed, to_id, ans_stack, ans_top);
         }
         else if (~to_id) {
-            auto p = to[to_id].lower_bound(&beg);
-            auto q = to[to_id].upper_bound(&ed);
-            for (; p != q; ++p)
-                if ((*p) -> keyword.match())
-                    ans_stack[++ans_top] = (*p) -> id;
+            to[to_id].find(&beg, &ed, -1, ans_stack, ans_top);
         }
         else {
-            auto p = all.lower_bound(&beg);
-            auto q = all.upper_bound(&ed);
-            for (; p != q; ++p)
-                if (assert(*p), (*p) -> keyword.match())
-                    ans_stack[++ans_top] = (*p) -> id;
+            all.find(&beg, &ed, -1, ans_stack, ans_top);
         }
         if (!~ans_top)
             puts("-");
