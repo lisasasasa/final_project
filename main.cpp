@@ -6,10 +6,12 @@ using namespace std;
 #include "Keyword.h"
 #include "Mail.h"
 #include "Heap.h"
+#include "priority.h"
 #include "Order_Tree.h"
 
 Mail mail[MAX_MAIL];
-Heap<MAX_MAIL, double> longest;
+Heap<MAX_MAIL, int> longest;
+Priority priority;
 Order_Tree order_tree;
 int mail_cnt = 0, mail_place[MAX_MAIL];
 String<50> mail_file[MAX_MAIL];
@@ -22,6 +24,7 @@ int main() {
     int from_id, to_id;
     long long datel, dater;
     char c, *p;
+    priority.init();
     while (scanf("%s", temp_string) != EOF) {
         switch (temp_string[0]) { // switch is more faster
             case 'a':
@@ -34,6 +37,7 @@ int main() {
                         longest.push(mail[x].length, mail[x].id);
                         file.insert(mail_file[mail[x].id]);
                         order_tree.insert(mail[x]);
+                        priority.insert(mail[x]);
                     }
                     else {
                         file.insert(file_string);
@@ -44,6 +48,7 @@ int main() {
                         longest.push(mail[mail_cnt].length, mail[mail_cnt].id);
                         fclose(f);
                         order_tree.insert(mail[mail_cnt]);
+                        priority.insert(mail[mail_cnt]);
                         record[file_string] = mail_cnt++;
                     }
                     printf("%d\n", int(file.size()));
@@ -58,6 +63,7 @@ int main() {
                     puts("-");
                 else {
                     order_tree.erase(mail[mail_place[x]]);
+                    priority.erase(x);
                     longest.erase(x);
                     mail_place[x] = -1;
                     file.erase(mail_file[x]);
@@ -110,6 +116,23 @@ int main() {
                     order_tree.query(from_id, to_id, datel, dater, exp);
                 }
                 break;
+            case 'p':
+                if (temp_string[1] == 'r') {
+                    int k;
+                    assert(scanf("%d", &k) != EOF);
+                    auto v = priority.query(k);
+                    if (v.empty())
+                        puts("-");
+                    else
+                        for (int i = 0; i < int(v.size()); ++i)
+                            printf("%d%c", v[i], " \n"[i + 1 == int(v.size())]);
+                    if (int(v.size()) < k)
+                        printf("The number of mail is less than %d...\n", k);
+                }
+                else {
+                    /* code */
+                }
+                
         }
     }
 }

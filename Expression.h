@@ -29,6 +29,10 @@ public:
                         postfix.push_back(String<25>(operator_stack.back()));
                     operator_stack.pop_back();  
                     break;
+                case '[':
+                    key.input_ex(str);
+                    postfix.push_back(key);
+                    break;
                 default:
                     key.input(str), --str;
                     postfix.push_back(key);
