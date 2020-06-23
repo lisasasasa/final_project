@@ -15,7 +15,7 @@ public:
         c[1] = 0;
     }
     String(string &s) {
-        strcpy(s.c_str(), c);
+        strcpy(c, s.c_str());
     }
     char& operator[](int idx) {
         return c[idx];

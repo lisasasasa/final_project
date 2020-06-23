@@ -38,20 +38,20 @@ public:
     }
     vector<int> kth(int k) {
         vector <int> v ;
-        priority_queue < pair <T , int > > pq;
+        priority_queue < pair <T , int > > kpq;
         pq.push(make_pair(data[1].first, 1)); 
         pair<T, int> top ;
         for ( int i = 0 ; i < k ; ++i ){
-            top = pq.top(); 
-            pq.pop();
+            top = kpq.top(); 
+            kpq.pop();
             if (del[-data[top.second].second]) {
                 pop_heap(top.second);
                 --i;
                 continue;
             }
             v.push_back(-data[top.second].second);
-            pq.push(make_pair(data[ 2 * top.second()) ].first, 2 * top.second); 
-            pq.push(make_pair(data[ 2 * top.second()) + 1 ].first, 2 * top.second + 1); 
+            kpq.push(make_pair(data[ 2 * top.second ].first, 2 * top.second)); 
+            kpq.push(make_pair(data[ 2 * top.second + 1 ].first, 2 * top.second + 1)); 
         }
         return v ;
     }
