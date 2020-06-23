@@ -17,29 +17,28 @@ class Priority{
 public:
     void init(){
         string line , split , query , query_index ;
-	    ios::sync_with_stdio(0);
-	    cin.tie(0);
-	    ifstream file(".priority_conf") ;
+	    ifstream file ;
+        file.open(".priority_conf", ios::in);
 
         getline ( file , line ) ;
-        istringstream is( line ) ; 
+        stringstream is( line ) ; 
         while( is >> split ) people.push_back(split) ; 
 
         getline ( file , line ) ;
-        istringstream is2( line ) ; 
+        stringstream is2( line ) ; 
 		while( is2 >> split ) password.push_back(split) ;
 
 		getline ( file , line ) ;
+        stringstream is3( line ) ;
         for(int i = 0 ; i < 3 ; ++i ){
             double x;
-            istringstream is3( line ) ;
             is3 >> x;
             if( i == 0 ) People = x ;
             else if ( i == 1 ) Password = x ;
             else Date = x ;
         }
 		file.close() ;
-	};
+	}
 
     /*void build(){
 
@@ -47,12 +46,12 @@ public:
     void insert(Mail &M) {
         double value , PEOPLE = 0 , PASSWD = 0  , DATE = 0 ;
         for (int  i = 0 ; i < int(people.size()) ; ++i ) {
-            if( M.keyword.match(people[i])) PEOPLE = 110/(i+1) - 100 ;
+            if( M.keyword.match(people[i])) PEOPLE = 110./(i+1) - 100. ;
         }
         for (int  i = 0 ; i < int(password.size()) ; ++i ) {
-            if( M.keyword.match(password[i])) PASSWD += 110/(i+1) - 100 ;
+            if( M.keyword.match(password[i])) PASSWD += 110./(i+1) - 100.;
         }
-        DATE = M.date/20000000 ;
+        DATE = (double)M.date/20000000 ;
         value = People * PEOPLE + Password * PASSWD + Date * DATE ;
         list.push( value , M.id );
     }

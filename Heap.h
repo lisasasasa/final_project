@@ -20,8 +20,12 @@ public:
     void push(T x,int num) {
         del[num] = 0;
         ++Length;
-        data[Length] = make_pair( x , num );
-        //data.push(pair<T, int>(x, -num));
+        data[Length] = make_pair( x , -num );
+        for (int i = Length; i > 1; )
+            if (data[i] > data[i >> 1])
+                swap(data[i], data[i >> 1]);
+            else
+                break;
     }
     T top() {
         while ( Length > 0 && del[-data[1].second])
@@ -39,19 +43,22 @@ public:
     vector<int> kth(int k) {
         vector <int> v ;
         priority_queue < pair <T , int > > kpq;
-        pq.push(make_pair(data[1].first, 1)); 
+        kpq.push(make_pair(data[1].first, 1)); 
         pair<T, int> top ;
-        for ( int i = 0 ; i < k ; ++i ){
+        for ( int i = 0 ; i < k && !kpq.empty() ; ++i ){
             top = kpq.top(); 
             kpq.pop();
             if (del[-data[top.second].second]) {
                 pop_heap(top.second);
+                kpq.push(make_pair(data[top.second].first, top.second));
                 --i;
                 continue;
             }
             v.push_back(-data[top.second].second);
-            kpq.push(make_pair(data[ 2 * top.second ].first, 2 * top.second)); 
-            kpq.push(make_pair(data[ 2 * top.second + 1 ].first, 2 * top.second + 1)); 
+            if (2 * top.second <= Length)
+                kpq.push(make_pair(data[ 2 * top.second ].first, 2 * top.second)); 
+            if (2 * top.second + 1 <= Length)
+                kpq.push(make_pair(data[ 2 * top.second + 1 ].first, 2 * top.second + 1)); 
         }
         return v ;
     }

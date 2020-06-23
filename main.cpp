@@ -119,7 +119,7 @@ int main() {
             case 'p':
                 if (temp_string[1] == 'r') {
                     int k;
-                    scanf("%d", &k);
+                    assert(scanf("%d", &k) != EOF);
                     auto v = priority.query(k);
                     if (v.empty())
                         puts("-");
