@@ -24,6 +24,9 @@ public:
     char* c_str(int idx = 0) {
         return c + idx;
     }
+    const char* c_str(int idx = 0) const {
+        return c + idx;
+    }
     char& operator[](int idx) {
         return c[idx];
     }

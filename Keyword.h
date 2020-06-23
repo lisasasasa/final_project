@@ -10,6 +10,9 @@ class Keyword{
     int pool_top = -1;
     unordered_map<String<25>, int> data;
 public:
+    unordered_map<String<25>, int>& get_data() {
+        return data;
+    }
     bool match(Expression &exp) {
         int num_top = -1;
         for(int i = 0; i < int(exp.postfix.size()) ; ++i ) {
@@ -64,4 +67,3 @@ public:
         }
     }
 };
-

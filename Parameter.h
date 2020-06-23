@@ -6,7 +6,7 @@ const int user_range = 65536;
 char temp_string[TEMP_SIZE];
 int temp_stack[STACK_SIZE];
 
-char user[user_range][55];
+char User[user_range][55];
 unsigned int user_hash(char *s, int flag = 0) { // Perfect hash
     //printf("hash: %s %d\n",s,flag);
     unsigned int hash = 0;
@@ -14,10 +14,10 @@ unsigned int user_hash(char *s, int flag = 0) { // Perfect hash
         if (c != '"')
             hash = (((hash << 6) + hash) + c) & (user_range - 1);
     if (flag) {
-        if (!user[hash][0])
-            strcpy(user[hash], s);
+        if (!User[hash][0])
+            strcpy(User[hash], s);
     }
-    else if (strcmp(user[hash], s))
+    else if (strcmp(User[hash], s))
         hash = 0;
     return hash;
 }

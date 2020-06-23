@@ -8,10 +8,12 @@ using namespace std;
 #include "Heap.h"
 #include "priority.h"
 #include "Order_Tree.h"
+#include "statistic.h"
 
 Mail mail[MAX_MAIL];
 Heap<MAX_MAIL, int> longest;
 Priority priority;
+Statistics statistic;
 Order_Tree order_tree;
 int mail_cnt = 0, mail_place[MAX_MAIL];
 String<50> mail_file[MAX_MAIL];
@@ -38,6 +40,7 @@ int main() {
                         file.insert(mail_file[mail[x].id]);
                         order_tree.insert(mail[x]);
                         priority.insert(mail[x]);
+                        statistic.add_statistics(mail[x]);
                     }
                     else {
                         file.insert(file_string);
@@ -49,6 +52,7 @@ int main() {
                         fclose(f);
                         order_tree.insert(mail[mail_cnt]);
                         priority.insert(mail[mail_cnt]);
+                        statistic.add_statistics(mail[mail_cnt]);
                         record[file_string] = mail_cnt++;
                     }
                     printf("%d\n", int(file.size()));
@@ -65,6 +69,7 @@ int main() {
                     order_tree.erase(mail[mail_place[x]]);
                     priority.erase(x);
                     longest.erase(x);
+                    statistic.remove_statistics(mail[mail_place[x]]);
                     mail_place[x] = -1;
                     file.erase(mail_file[x]);
                     printf("%d\n", int(file.size()));
@@ -130,9 +135,17 @@ int main() {
                         printf("The number of mail is less than %d...\n", k);
                 }
                 else {
-                    /* code */
+                    int m, n;
+                    assert(scanf("%s%d%d", temp_string, &m, &n) != EOF);
+                    for (int i = 1; temp_string[i]; ++i)
+                        if (temp_string[i] >= 'A' && temp_string[i] <= 'Z')
+                            temp_string[i] ^= 'a' ^ 'A';
+                        else if (temp_string[i] == '"')
+                            temp_string[i] = 0;
+                    from_id = user_hash(temp_string + 1); 
+                    statistic.peek(from_id, m, n);
                 }
-                
+
         }
     }
 }
