@@ -3,6 +3,9 @@ class String {
     char c[N];
     int the_size;
 public:
+    bool operator<(const String<N> &s) const{
+        return strcmp(c, s.c) < 0;
+    }
     bool operator==(const String<N> &s) const{
         return strcmp(c, s.c) == 0;
     }
@@ -18,6 +21,9 @@ public:
         strcpy(c, s.c_str());
         the_size = s.size();
     }
+    char* c_str(int idx = 0) {
+        return c + idx;
+    }
     char& operator[](int idx) {
         return c[idx];
     }
@@ -30,6 +36,16 @@ public:
         if (*s == 0)
             return 0;
         for (the_size = 0; (c[the_size] = *s) && isalphnum(c[the_size]); ++s)
+            ++the_size;
+        c[the_size] = 0;
+        return 1;
+    }
+    int input_ex(char *&s) {
+        while (*s == ' ')
+            ++s;
+        if (*s == 0)
+            return 0;
+        for (the_size = 0; (c[the_size] = *s) && (isalphnum(c[the_size]) || c[the_size] == '['); ++s)
             ++the_size;
         c[the_size] = 0;
         return 1;
