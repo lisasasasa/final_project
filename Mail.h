@@ -19,6 +19,7 @@ public:
         printf("Length: %d\n", length);
     }
     void input(FILE *file) {
+        keyword.init();
         char month[15];
         String<25> word;
         assert(fgets(temp_string, TEMP_SIZE, file));
